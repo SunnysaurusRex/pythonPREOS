@@ -7,7 +7,7 @@ from scipy.optimize import newton
 R = 8.314462; #Gas constant, MPa cm**3 / mol-K
 ##constants and parameters
 T = 298; # temperature of interest, K
-P = .1; #pressure of interest, MPa
+P = .9; #pressure of interest, MPa
 
 Tc = 369.8; #critical temperature
 Pc = 4.249; #critical pressure
@@ -110,10 +110,12 @@ def percentError(x, accepted):
 ##plotting 
 def plotCubic():
 	plt.figure(1)
-	plt.title("Peng-Robinson Cubic Equation of State", loc ="left")
+	plt.title("Peng-Robinson Cubic Equation of State (T=" + str(T) +' K)', loc ="left")
 	plt.ylabel("Pressure (MPa)")
 	plt.xlabel("Molar Volume (cm$^{3}$/mol)")
-	plt.axhline()
+	plt.axhline();
+	global P
+	plt.axhline(P, color='seagreen', label='P = ' + str(P) + " MPa");
 	plt.ylim(0, Pc)
 	plt.axvline(b, label="b = " + str(round(b,3)));
 	V = np.linspace(b+1, 2000, 200)
@@ -140,9 +142,11 @@ def plotFugacityDifference():
 	plt.ylabel('$f_{l}-f_{v}$ (MPa)');
 	plt.xlabel('Pressure (MPa)');
 	line2 = plt.plot(pressure, fugadiff, color='magenta', label='$f_{l}-f_{v}$');
+	plt.axvline(antoine(T), color="lightsteelblue", label="Antoine vapor pressure")
 	plt.legend();
 	plt.ylim(-2,2)
 	plt.axhline(color="blue")	
+
 ##function call
 Pvap = newton(optim, guess, maxiter=50);
 volumes = freikugel(P);
